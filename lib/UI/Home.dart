@@ -3,7 +3,7 @@ import 'package:flutter_week6_databasesqlite/helpers/DbHelper.dart';
 import 'package:flutter_week6_databasesqlite/models/item.dart';
 import 'package:sqflite/sqflite.dart';
 import 'dart:async';
-import 'EntryForm.dart';
+import 'package:flutter_week6_databasesqlite/UI/EntryForm.dart';
 
 //pendukung program asinkron
 class Home extends StatefulWidget {
@@ -18,11 +18,15 @@ class HomeState extends State<Home> {
   
   List<Item> itemList;
 
+  //Item get item => null;
+
   @override
   Widget build(BuildContext context) {
     if (itemList == null) {
+      // ignore: deprecated_member_use
       itemList = List<Item>();
     }
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Daftar Item'),
@@ -35,6 +39,7 @@ class HomeState extends State<Home> {
           alignment: Alignment.bottomCenter,
           child: SizedBox(
             width: double.infinity,
+            // ignore: deprecated_member_use
             child: RaisedButton(
               child: Text("Tambah Item"),
               onPressed: () async {
@@ -55,15 +60,20 @@ class HomeState extends State<Home> {
   }
 
   Future<Item> navigateToEntryForm(BuildContext context, Item item) async {
-    var result = await Navigator.push(context,
-        MaterialPageRoute(builder: (BuildContext context) {
-      return EntryForm(item);
-    }));
+    var result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (BuildContext context) {
+          return EntryForm(item);
+        }
+      )
+    );
     return result;
   }
 
   ListView createListView() {
-    TextStyle textStyle = Theme.of(context).textTheme.headline5;
+    // ignore: deprecated_member_use
+    TextStyle textStyle = Theme.of(context).textTheme.subhead;
     return ListView.builder(
       itemCount: count,
       itemBuilder: (BuildContext context, int index) {
@@ -84,12 +94,21 @@ class HomeState extends State<Home> {
               child: Icon(Icons.delete),
               onTap: () async {
                 //TODO 3 Panggil Fungsi untuk Delete dari DB berdasarkan Item
+                var item;
+                int result = await dbHelper.delete(this.itemList[index]);
+                if (result > 0) {
+                  updateListView();
+                }
               },
             ),
             onTap: () async {
               var item =
-                  await navigateToEntryForm(context, this.itemList[index]);
+              await navigateToEntryForm(context, this.itemList[index]);
               //TODO 4 Panggil Fungsi untuk Edit data
+              int result = await dbHelper.update(item);
+              if (result > 0) {
+                updateListView();
+              }
             },
           ),
         );

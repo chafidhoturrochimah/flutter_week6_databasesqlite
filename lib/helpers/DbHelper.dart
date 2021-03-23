@@ -7,6 +7,7 @@ import 'package:path_provider/path_provider.dart';
 class DbHelper {
   static DbHelper _dbHelper;
   static Database _database; 
+  
   DbHelper._createObject();
 
   Future<Database> initDb() async {
@@ -59,12 +60,12 @@ class DbHelper {
   }
 
   //delete databases
-  Future<int> delete(int id) async {
+  Future<int> delete(Item object) async {
     Database db = await this.initDb();
     int count = await db.delete(
       'item',
       where: 'id=?',
-      whereArgs: [id]
+      whereArgs: [object.id]
     );
     return count;
   }
