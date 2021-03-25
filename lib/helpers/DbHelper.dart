@@ -16,27 +16,40 @@ class DbHelper {
     String path = directory.path + 'item.db';
     
     //create, read databases
-    var itemDatabase = openDatabase(path, version: 4, onCreate: _createDb);
+    var itemDatabase = openDatabase(
+      path, version: 8, 
+      onCreate: _createDb,
+      onUpgrade: _onUpgrade
+    );
 
     //mengembalikan nilai object sebagai hasil dari fungsinya
     return itemDatabase;
   }
 
+  void _onUpgrade(Database db, int oldVersion, int newVersion) {
+    _createDb(db, newVersion);
+  }
+
   //buat tabel baru dengan nama item
   void _createDb(Database db, int version) async {
-    await db.execute('''
+    var batch = db.batch();
+    await batch.execute('DROP TABLE IF EXISTS item');
+    await batch.execute('''
       CREATE TABLE item (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      name TEXT,
-      price INTEGER
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        kodeBarang TEXT,
+        name TEXT,
+        price INTEGER,
+        stok INTEGER
       )
     ''');
+    await batch.commit();
   }
 
   //select databases
   Future<List<Map<String, dynamic>>> select() async {
     Database db = await this.initDb();
-    var mapList = await db.query('item', orderBy: 'name');
+    var mapList = await db.query('item', orderBy: 'kodeBarang');
     return mapList;
   }
 
@@ -63,7 +76,7 @@ class DbHelper {
   Future<int> delete(Item object) async {
     Database db = await this.initDb();
     int count = await db.delete(
-      'item',
+      'item', 
       where: 'id=?',
       whereArgs: [object.id]
     );

@@ -18,8 +18,6 @@ class HomeState extends State<Home> {
   
   List<Item> itemList;
 
-  //Item get item => null;
-
   @override
   Widget build(BuildContext context) {
     if (itemList == null) {
@@ -83,22 +81,23 @@ class HomeState extends State<Home> {
           child: ListTile(
             leading: CircleAvatar(
               backgroundColor: Colors.red,
-              child: Icon(Icons.ad_units),
+              child: Icon(Icons.people),
             ),
             title: Text(
-              this.itemList[index].name,
+              this.itemList[index].kodeBarang,
               style: textStyle,
             ),
-            subtitle: Text(this.itemList[index].price.toString()),
+            subtitle: 
+              Text(
+                this.itemList[index].price.toString()
+              ),
             trailing: GestureDetector(
               child: Icon(Icons.delete),
               onTap: () async {
                 //TODO 3 Panggil Fungsi untuk Delete dari DB berdasarkan Item
-                var item;
                 int result = await dbHelper.delete(this.itemList[index]);
-                if (result > 0) {
-                  updateListView();
-                }
+                updateListView();
+                
               },
             ),
             onTap: () async {
@@ -106,9 +105,7 @@ class HomeState extends State<Home> {
               await navigateToEntryForm(context, this.itemList[index]);
               //TODO 4 Panggil Fungsi untuk Edit data
               int result = await dbHelper.update(item);
-              if (result > 0) {
-                updateListView();
-              }
+              updateListView();
             },
           ),
         );

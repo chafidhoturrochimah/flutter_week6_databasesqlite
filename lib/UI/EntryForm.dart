@@ -16,15 +16,22 @@ class EntryFormState extends State<EntryForm> {
 
   EntryFormState(this.item);
 
+  TextEditingController kodeBarangController = TextEditingController();
   TextEditingController nameController = TextEditingController();
   TextEditingController priceController = TextEditingController();
+  //textediting controller untuk stok dan kode
+  TextEditingController stokController = TextEditingController();
+  
 
   @override
   Widget build(BuildContext context) {
     //kondisi
     if (item != null) {
+      kodeBarangController.text = item.kodeBarang;
       nameController.text = item.name;
       priceController.text = item.price.toString();
+      //kondisi stok dan kode
+      stokController.text = item.stok.toString();
     }
 
     //rubah
@@ -37,6 +44,24 @@ class EntryFormState extends State<EntryForm> {
         padding: EdgeInsets.only(top: 15.0, left: 10.0, right: 10.0),
         child: ListView(
           children: <Widget>[
+            // KodeBarang
+            Padding(
+              padding: EdgeInsets.only(top: 20.0, bottom: 20.0),
+              child: TextField(
+                controller: kodeBarangController,
+                keyboardType: TextInputType.text,
+                decoration: InputDecoration(
+                  labelText: 'Kode Barang',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(5.0),
+                  ),
+                ),
+                onChanged: (value) {
+                  //
+                },
+              ),
+            ),
+
             // nama
             Padding(
               padding: EdgeInsets.only(top: 20.0, bottom: 20.0),
@@ -73,6 +98,24 @@ class EntryFormState extends State<EntryForm> {
               ),
             ),
 
+            // stok
+            Padding(
+              padding: EdgeInsets.only(top: 20.0, bottom: 20.0),
+              child: TextField(
+                controller: stokController,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                  labelText: 'Stok',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(5.0),
+                  ),
+                ),
+                onChanged: (value) {
+                  //
+                },
+              ),
+            ),
+
             // tombol button
             Padding(
               padding: EdgeInsets.only(top: 20.0, bottom: 20.0),
@@ -91,13 +134,20 @@ class EntryFormState extends State<EntryForm> {
                       onPressed: () {
                         if (item == null) {
                           // tambah data
-                          item = Item(nameController.text,
-                            int.parse(priceController.text)
+                          item = Item(
+                            kodeBarangController.text,
+                            nameController.text,
+                            int.parse(priceController.text),
+                            //tambah data kode dan kode
+                            int.parse(stokController.text)
                           );
                         } else {
                           // ubah data
+                          item.kodeBarang = kodeBarangController.text;
                           item.name = nameController.text;
                           item.price = int.parse(priceController.text);
+                          //ubah data stok dan kode
+                          item.stok = int.parse(stokController.text);
                         }
                         // kembali ke layar sebelumnya dengan membawa objek item
                         Navigator.pop(context, item);
