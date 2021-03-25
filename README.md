@@ -7,5 +7,7 @@
 </ul><br>
 
 <b>Berikut ini hasil praktikum dan tugas jobsheet database sqlite :</b><br>
-<b>Video Demo</b><br>
+<ul>
+  <li><b>Video Demo</b></li>
+</ul><br>
 
