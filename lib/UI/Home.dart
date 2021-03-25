@@ -20,6 +20,7 @@ class HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    updateListView();
     if (itemList == null) {
       // ignore: deprecated_member_use
       itemList = List<Item>();
@@ -88,8 +89,18 @@ class HomeState extends State<Home> {
               style: textStyle,
             ),
             subtitle: 
-              Text(
-                this.itemList[index].price.toString()
+              Column(
+                children: [
+                  Text(
+                    'Nama : ' + this.itemList[index].name
+                  ),
+                  Text(
+                    'Harga : ' + this.itemList[index].price.toString()
+                  ),
+                  Text(
+                    'Stok : ' + this.itemList[index].stok.toString()
+                  ),
+                ],
               ),
             trailing: GestureDetector(
               child: Icon(Icons.delete),
@@ -97,7 +108,6 @@ class HomeState extends State<Home> {
                 //TODO 3 Panggil Fungsi untuk Delete dari DB berdasarkan Item
                 int result = await dbHelper.delete(this.itemList[index]);
                 updateListView();
-                
               },
             ),
             onTap: () async {
