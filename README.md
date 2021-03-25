@@ -13,8 +13,6 @@
 
 https://user-images.githubusercontent.com/52942668/112468645-1a8fa180-8d9b-11eb-839c-ec30d6d3c29e.mp4
 
-
-
 <br>
 
 <b>Berikut ini hasil praktikum dan tugas jobsheet database sqlite :</b><br>
